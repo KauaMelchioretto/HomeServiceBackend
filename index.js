@@ -13,7 +13,7 @@ const dataBase = mysql.createPool({
   database: "heroku_3bb06900a2cf28a",
 });
 
-app.use(cors({ credentials:true , origin: "http://localhost:3000"}));
+app.use(cors({ credentials:true , origin: "https://webhomeservice.herokuapp.com/"}));
 app.use(express.json());
 app.use(cookieParser()); 
 
