@@ -178,13 +178,7 @@ app.get("/getcookie", function (request, response){
 });
 
 app.get('/clearcookie', function(req, res) {
-  cookie = req.cookies;
-  for (var prop in cookie) {
-      if (!cookie.hasOwnProperty(prop)) {
-          continue;
-      }    
-      res.cookie(prop, 'token', {expires: new Date(0)});
-  }
+  clearCookie('token');
   res.send();
 });
 
