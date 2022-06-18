@@ -178,10 +178,8 @@ app.get("/getcookie", function (request, response){
 });
 
 app.get('/clearcookie', function(req, res) {
-  req.destroy(() => {
-    res.clearCookie("token");
-  })
-  res.send(res.clearCookie('token'));
+  res.clearCookie('token');
+  res.end();
 });
 
 app.put("/editService", (request, response) => {
