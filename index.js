@@ -164,7 +164,7 @@ app.post("/login", (request, response) => {
           path: "/",
           expires: new Date(Date.now() + 1200000),
           httpOnly: false,
-          sameSite: "none",
+          secure: true
         });
         response.json({ auth: true, token, result });
       } else response.send(null);
