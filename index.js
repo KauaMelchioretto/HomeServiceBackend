@@ -66,7 +66,7 @@ app.post("/getCards", (request, response) => {
 app.post("/resultados", (request, response) => {
   const { information } = request.body;
   if (information != null && information != " " && information != "") {
-    SQL = `SELECT idservice , name, profession, city, numberTel, description FROM services WHERE LOCATE (?, name) > 0 OR LOCATE (?, profession) > 0 OR LOCATE (?, city) > 0 OR LOCATE (?, city2) > 0 `;
+    SQL = `SELECT idservice , name, profession, city, city2, numberTel, description FROM services WHERE LOCATE (?, name) > 0 OR LOCATE (?, profession) > 0 OR LOCATE (?, city) > 0 OR LOCATE (?, city2) > 0 `;
 
     dataBase.query(
       SQL,
@@ -164,6 +164,7 @@ app.post("/login", (request, response) => {
           path: "/",
           expires: new Date(Date.now() + 1200000),
           httpOnly: false,
+          sameSite: "none",
         });
         response.json({ auth: true, token, result });
       } else response.send(null);
