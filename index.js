@@ -181,7 +181,7 @@ app.get('/clearcookie', function(req, res) {
   req.destroy(() => {
     res.clearCookie("token");
   })
-  res.end();
+  res.send(res.clearCookie('token'));
 });
 
 app.put("/editService", (request, response) => {
