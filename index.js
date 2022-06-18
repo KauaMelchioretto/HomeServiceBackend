@@ -13,6 +13,10 @@ const dataBase = mysql.createPool({
   database: "heroku_3bb06900a2cf28a",
 });
 
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`rodando server na porta ${process.env.PORT}`);
+});
+
 app.use(cors({ credentials:true }));
 app.use(express.json());
 app.use(cookieParser()); 
@@ -222,11 +226,3 @@ app.delete("/deleteService/:id", (request, response) => {
     else response.send(result);
   });
 });
-
-app.listen(process.env.PORT || 3001, () => {
-  console.log("rodando server");
-});
-
-if(process.env.NODE_ENV == 'production') {
-  app.use(express.static('client/build'))
-}
