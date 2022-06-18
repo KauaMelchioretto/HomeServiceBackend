@@ -161,6 +161,7 @@ app.post("/login", (request, response) => {
       if (result.length !== 0) {
         token = jwt.sign({ result }, SECRET, { expiresIn: "1h" });
         response.cookie("token", token, {
+          path: "/",
           expires: new Date(Date.now() + 1200000),
           httpOnly: false,
         });
