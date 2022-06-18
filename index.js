@@ -17,7 +17,7 @@ app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
 });
 
-app.use(cors({ credentials:true }));
+app.use(cors({ credentials:true, origin:"https://webhomeservice.herokuapp.com" }));
 app.use(express.json());
 app.use(cookieParser()); 
 
