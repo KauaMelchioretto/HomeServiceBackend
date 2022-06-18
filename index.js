@@ -178,7 +178,7 @@ app.get("/getcookie", function (request, response){
 });
 
 app.get('/clearcookie', function(req, res) {
-  clearCookie('token');
+  res.clearCookie('token');
   res.send();
 });
 
