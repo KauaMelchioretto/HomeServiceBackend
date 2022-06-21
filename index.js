@@ -204,8 +204,8 @@ app.put("/editService", (request, response) => {
   );
 });
 
-app.delete("/deleteAvaliation/:id", (request, response) => {
-  const { id } = request.params.id;
+app.get("/deleteAvaliation", (request, response) => {
+  const { id } = request.body;
 
   let SQL = "DELETE FROM avaliations WHERE idservice = ?";
   dataBase.query(SQL, [id], (err, result) => {
@@ -214,8 +214,8 @@ app.delete("/deleteAvaliation/:id", (request, response) => {
   });
 });
 
-app.delete("/deleteService/:id", (request, response) => {
-  const { id } = request.params;
+app.post("/deleteService", (request, response) => {
+  const { id } = request.body;
 
   let SQL = "DELETE FROM services WHERE idservice = ?";
   dataBase.query(SQL, [id], (err, result) => {
