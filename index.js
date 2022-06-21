@@ -204,7 +204,7 @@ app.put("/editService", (request, response) => {
   );
 });
 
-app.get("/deleteAvaliation", (request, response) => {
+app.post("/deleteAvaliation", (request, response) => {
   const { id } = request.body;
 
   let SQL = "DELETE FROM avaliations WHERE idservice = ?";
