@@ -155,7 +155,7 @@ app.post("/getAvaliations", (request, response) => {
 app.post("/getEmailUsuario", (request, response) => {
   const { email } = request.body;
 
-  let SQL = "SELECT email FROM users WHERE ? = email";
+  let SQL = "SELECT email FROM users WHERE email = ?";
   dataBase.query(SQL, [email], (err, result) => {
     if (err) console.log(err);
     else response.send(result);
