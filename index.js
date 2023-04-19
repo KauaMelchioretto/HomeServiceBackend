@@ -41,7 +41,7 @@ app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
 });
 
-//app.use(cors({ credentials:true, origin:"http://localhost:3000" }));
+app.use(cors({ credentials:true, origin:"https://homeservice-1vyv.onrender.com" }));
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
