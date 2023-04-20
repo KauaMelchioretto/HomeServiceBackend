@@ -4,7 +4,6 @@ const postGree = require("pg");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-var path = require('path');
 
 const dataBase = new postGree.Pool({
   connectionString: process.env.CONNECTION_STRING
