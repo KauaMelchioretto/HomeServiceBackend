@@ -48,7 +48,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get('/*', function (request, response) {
-  response.sendFile(path.join(__dirname, "/index.html"), function (err) {
+  console.log('REQUEST TO /*');
+  response.sendFile(path.join(__dirname, "https://homeservice-ute7.onrender.com/"), function (err) {
     if (err) {
       response.status(500).send(err);
     }
