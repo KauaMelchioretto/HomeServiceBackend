@@ -42,7 +42,6 @@ app.listen(process.env.PORT || 3001, () => {
 });
 
 app.use(cors({ credentials:true, origin:"https://homeservice-1vyv.onrender.com" }));
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
