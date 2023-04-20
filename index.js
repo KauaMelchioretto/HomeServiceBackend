@@ -47,15 +47,6 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/*', function (request, response) {
-  console.log('REQUEST TO /*');
-  response.sendFile(path.join(__dirname, "https://homeservice-ute7.onrender.com/"), function (err) {
-    if (err) {
-      response.status(500).send(err);
-    }
-  });
-});
-
 function verifyJWT(request, response) {
   const token = jwt.decode(request);
   const idUser = parseInt(token.result.map((value) => value.iduser));
