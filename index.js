@@ -4,38 +4,45 @@ const postGree = require("pg");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+require('dotenv').config();
 
 const dataBase = new postGree.Pool({
   connectionString: process.env.CONNECTION_STRING
+  // host: 'localhost',
+  // port: 5432,
+  // user: 'postgres',
+  // password: 'password',
+  // database: 'homeservice'
 });
 
-// dataBase.connect((err) => {
-//   if (err) console.log(err);
-//   else console.log("connected succesfully"), createDataBaseTables();
-// });
+dataBase.connect((err) => {
+  if (err) console.log(err);
+  else console.log("connected succesfully"), createDataBaseTables();
+});
 
-// async function createDataBaseTables() {
-//   let usersTable =
-//     "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY NOT NULL UNIQUE, username varchar(60) NOT NULL, email varchar(45) NOT NULL UNIQUE, password varchar(45) NOT NULL, active BOOLEAN NOT NULL);";
+async function createDataBaseTables() {
+  let usersTable =
+    "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY NOT NULL UNIQUE, username varchar(60) NOT NULL, email varchar(45) NOT NULL UNIQUE, password varchar(45) NOT NULL, active BOOLEAN NOT NULL);";
 
-//   let servicesTable =
-//     "CREATE TABLE IF NOT EXISTS services (id SERIAL PRIMARY KEY NOT NULL UNIQUE, user_id SERIAL NOT NULL, name varchar(45) NOT NULL, profession varchar(45) NOT NULL, city varchar(45) NOT NULL, cit2 varchar(45) DEFAULT NULL, phone_number varchar(45) NOT NULL, description varchar(100) DEFAULT NULL, CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES users (id));";
+  let servicesTable =
+    "CREATE TABLE IF NOT EXISTS services (id SERIAL PRIMARY KEY NOT NULL UNIQUE, user_id SERIAL NOT NULL, name varchar(45) NOT NULL, profession varchar(45) NOT NULL, city varchar(45) NOT NULL, cit2 varchar(45) DEFAULT NULL, phone_number varchar(45) NOT NULL, description varchar(100) DEFAULT NULL, CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES users (id));";
 
-//   let avaliationsTable =
-//     "CREATE TABLE IF NOT EXISTS avaliations (id SERIAL PRIMARY KEY NOT NULL UNIQUE, service_id int NOT NULL, username varchar(60) NOT NULL, comment varchar(350) DEFAULT NULL, avaliation int NOT NULL,CONSTRAINT service_id FOREIGN KEY (service_id) REFERENCES services (id))";
+  let avaliationsTable =
+    "CREATE TABLE IF NOT EXISTS avaliations (id SERIAL PRIMARY KEY NOT NULL UNIQUE, service_id int NOT NULL, username varchar(60) NOT NULL, comment varchar(350) DEFAULT NULL, avaliation int NOT NULL,CONSTRAINT service_id FOREIGN KEY (service_id) REFERENCES services (id))";
 
-//   var queries = [];
-//   queries.push(usersTable, servicesTable, avaliationsTable);
+  var queries = [];
+  queries.push(usersTable, servicesTable, avaliationsTable);
 
-//   for (let i = 0; i < queries.length; i++) {
-//     try {
-//       let res = await dataBase.query(queries[i]);
-//       console.log(res);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   }
-// };
+  for (let i = 0; i < queries.length; i++) {
+    try {
+      let res = await dataBase.query(queries[i]);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  console.clear();
+};
 
 app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
@@ -62,7 +69,7 @@ app.post("/registrosDeServicos", (request, response) => {
   const { numberTel } = request.body;
   const { description } = request.body;
 
-  let SQL = `INSERT INTO services (iduser, name, profession, city, city2, numberTel, description) VALUES ( ?, ?, ?, ?, ?, ?, ?)`;
+  let SQL = `INSERT INTO services (iduser, name, profession, city, city2, numberTel, description) VALUES ( $1, $2, $3, $4, $5, $6, $7)`;
 
   dataBase.query(
     SQL,
@@ -78,7 +85,7 @@ app.post("/getCards", (request, response) => {
   const { userToken } = request.body;
   const iduser = verifyJWT(userToken);
 
-  let SQL = "SELECT * FROM services WHERE ? = iduser";
+  let SQL = "SELECT * FROM services WHERE $1 = iduser";
 
   dataBase.query(SQL, [iduser], (err, result) => {
     if (err) console.log(err);
@@ -90,7 +97,7 @@ app.post("/resultados", (request, response) => {
   const { information } = request.body;
   console.log(information);
   if (information != null && information != " " && information != "") {
-    SQL = `SELECT idservice , name, profession, city, city2, numberTel, description FROM services WHERE LOCATE (?, name) > 0 OR LOCATE (?, profession) > 0 OR LOCATE (?, city) > 0 OR LOCATE (?, city2) > 0 `;
+    SQL = `SELECT idservice , name, profession, city, city2, numberTel, description FROM services WHERE LOCATE ($1, name) > 0 OR LOCATE ($2, profession) > 0 OR LOCATE ($3, city) > 0 OR LOCATE ($4, city2) > 0 `;
 
     dataBase.query(
       SQL,
@@ -127,7 +134,7 @@ app.post("/registrarAvaliacao", (request, response) => {
   const { avaliation } = request.body;
 
   let SQL =
-    "INSERT INTO avaliations (idservice, username, comment, avaliation) VALUES (?, ?, ?, ?)";
+    "INSERT INTO avaliations (idservice, username, comment, avaliation) VALUES ($1, $2, $3, $4)";
 
   dataBase.query(
     SQL,
@@ -143,7 +150,7 @@ app.post("/getAvaliations", (request, response) => {
   const { idService } = request.body;
 
   let SQL =
-    "SELECT idavaliation, username, comment, avaliation FROM avaliations WHERE ? = idservice";
+    "SELECT idavaliation, username, comment, avaliation FROM avaliations WHERE $1 = idservice";
 
   dataBase.query(SQL, [idService], (err, result) => {
     if (err) console.log(err);
@@ -154,10 +161,10 @@ app.post("/getAvaliations", (request, response) => {
 app.post("/getEmailUsuario", (request, response) => {
   const { email } = request.body;
 
-  let SQL = "SELECT email FROM users WHERE email = ?";
+  let SQL = "SELECT email FROM users WHERE email = $1";
   dataBase.query(SQL, [email], (err, result) => {
     if (err) console.log(err);
-    else response.send(result);
+    else response.send(result.rows[0]);
   });
 });
 
@@ -167,10 +174,10 @@ app.post("/registroUsuario", (request, response) => {
   const { password } = request.body;
 
   let SQL =
-    "INSERT INTO users (username, email, password, active) VALUES (?, ?, ?, ?)";
+    "INSERT INTO users (username, email, password, active) VALUES ($1, $2, $3, $4)";
   dataBase.query(SQL, [userName, email, password, false], (err, result) => {
     if (err) console.log(err);
-    else response.sendStatus(200);
+    else response.sendStatus(200), console.log(result);
   });
 });
 
@@ -180,11 +187,11 @@ app.post("/login", (request, response) => {
   let token;
 
   let SQL =
-    "SELECT iduser, username FROM users WHERE ? = email AND ? = password";
+    "SELECT id, username FROM users WHERE $1 = email AND $2 = password";
   dataBase.query(SQL, [email, password], (err, result) => {
     if (err) console.log(err);
     else {
-      if (result.length !== 0) {
+      if (result.rows.length !== 0) {
         token = jwt.sign({ result }, process.env.SECRET, { expiresIn: "1h" });
         response.cookie("token", token, {
           path: "/",
@@ -218,7 +225,7 @@ app.put("/editService", (request, response) => {
   const description = request.body.description;
 
   let SQL =
-    "UPDATE services SET name = ?, profession = ?, city = ?, city2 = ?, numberTel = ?, description = ?WHERE idservice = ?";
+    "UPDATE services SET name = $1, profession = $2, city = $3, city2 = $4, numberTel = $5, description = $6 WHERE idservice = $7";
 
   dataBase.query(
     SQL,
@@ -233,7 +240,7 @@ app.put("/editService", (request, response) => {
 app.post("/deleteAvaliation", (request, response) => {
   const { id } = request.body;
 
-  let SQL = "DELETE FROM avaliations WHERE idservice = ?";
+  let SQL = "DELETE FROM avaliations WHERE idservice = $1";
   dataBase.query(SQL, [id], (err, result) => {
     if (err) console.log(err);
     else response.send(result);
@@ -243,7 +250,7 @@ app.post("/deleteAvaliation", (request, response) => {
 app.post("/deleteService", (request, response) => {
   const { id } = request.body;
 
-  let SQL = "DELETE FROM services WHERE idservice = ?";
+  let SQL = "DELETE FROM services WHERE idservice = $1";
   dataBase.query(SQL, [id], (err, result) => {
     if (err) console.log(err);
     else response.send(result);
