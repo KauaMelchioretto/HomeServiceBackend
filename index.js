@@ -9,33 +9,33 @@ const dataBase = new postGree.Pool({
   connectionString: process.env.CONNECTION_STRING
 });
 
-dataBase.connect((err) => {
-  if (err) console.log(err);
-  else console.log("connected succesfully"), createDataBaseTables();
-});
+// dataBase.connect((err) => {
+//   if (err) console.log(err);
+//   else console.log("connected succesfully"), createDataBaseTables();
+// });
 
-async function createDataBaseTables() {
-  let usersTable =
-    "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY NOT NULL UNIQUE, username varchar(60) NOT NULL, email varchar(45) NOT NULL UNIQUE, password varchar(45) NOT NULL, active BOOLEAN NOT NULL);";
+// async function createDataBaseTables() {
+//   let usersTable =
+//     "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY NOT NULL UNIQUE, username varchar(60) NOT NULL, email varchar(45) NOT NULL UNIQUE, password varchar(45) NOT NULL, active BOOLEAN NOT NULL);";
 
-  let servicesTable =
-    "CREATE TABLE IF NOT EXISTS services (id SERIAL PRIMARY KEY NOT NULL UNIQUE, user_id SERIAL NOT NULL, name varchar(45) NOT NULL, profession varchar(45) NOT NULL, city varchar(45) NOT NULL, cit2 varchar(45) DEFAULT NULL, phone_number varchar(45) NOT NULL, description varchar(100) DEFAULT NULL, CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES users (id));";
+//   let servicesTable =
+//     "CREATE TABLE IF NOT EXISTS services (id SERIAL PRIMARY KEY NOT NULL UNIQUE, user_id SERIAL NOT NULL, name varchar(45) NOT NULL, profession varchar(45) NOT NULL, city varchar(45) NOT NULL, cit2 varchar(45) DEFAULT NULL, phone_number varchar(45) NOT NULL, description varchar(100) DEFAULT NULL, CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES users (id));";
 
-  let avaliationsTable =
-    "CREATE TABLE IF NOT EXISTS avaliations (id SERIAL PRIMARY KEY NOT NULL UNIQUE, service_id int NOT NULL, username varchar(60) NOT NULL, comment varchar(350) DEFAULT NULL, avaliation int NOT NULL,CONSTRAINT service_id FOREIGN KEY (service_id) REFERENCES services (id))";
+//   let avaliationsTable =
+//     "CREATE TABLE IF NOT EXISTS avaliations (id SERIAL PRIMARY KEY NOT NULL UNIQUE, service_id int NOT NULL, username varchar(60) NOT NULL, comment varchar(350) DEFAULT NULL, avaliation int NOT NULL,CONSTRAINT service_id FOREIGN KEY (service_id) REFERENCES services (id))";
 
-  var queries = [];
-  queries.push(usersTable, servicesTable, avaliationsTable);
+//   var queries = [];
+//   queries.push(usersTable, servicesTable, avaliationsTable);
 
-  for (let i = 0; i < queries.length; i++) {
-    try {
-      let res = await dataBase.query(queries[i]);
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-};
+//   for (let i = 0; i < queries.length; i++) {
+//     try {
+//       let res = await dataBase.query(queries[i]);
+//       console.log(res);
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+// };
 
 app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
