@@ -8,12 +8,20 @@ require('dotenv').config();
 
 const dataBase = new postGree.Pool({
   connectionString: process.env.CONNECTION_STRING
-  // host: 'localhost',
-  // port: 5432,
-  // user: 'postgres',
-  // password: 'password',
-  // database: 'homeservice'
+  // host: process.env.DB_HOST,
+  // port: process.env.DB_PORT,
+  // user: process.env.DB_USER,
+  // password: process.env.DB_PASSWORD,
+  // database: process.env.DB_DATABASE
 });
+
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`rodando server na porta ${process.env.PORT}`);
+});
+
+app.use(cors({ credentials:true, origin:"https://homeservice-1vyv.onrender.com" }));
+app.use(express.json());
+app.use(cookieParser());
 
 dataBase.connect((err) => {
   if (err) console.log(err);
@@ -44,13 +52,6 @@ async function createDataBaseTables() {
   console.clear();
 };
 
-app.listen(process.env.PORT || 3001, () => {
-  console.log(`rodando server na porta ${process.env.PORT}`);
-});
-
-app.use(cors({ credentials:true, origin:"https://homeservice-1vyv.onrender.com" }));
-app.use(express.json());
-app.use(cookieParser());
 
 function verifyJWT(request, response) {
   const token = jwt.decode(request);
