@@ -19,7 +19,7 @@ app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
 });
 
-app.use(cors({ credentials:true, origin:"https://homeservice-1vyv.onrender.com" }));
+app.use(cors({ credentials:true, origin:"https://homeservice-ute7.onrender.com" }));
 app.use(express.json());
 app.use(cookieParser());
 
