@@ -197,10 +197,9 @@ app.post("/login", (request, response) => {
         response.cookie("token", token, {
           path: "/",
           expires: new Date(Date.now() + 1200000),
-          domain: 'https://homeservice-ute7.onrender.com',
-          httpOnly: false,
+          httpOnly: true,
           secure: true,
-          sameSite: "none",
+          // sameSite: "none",
         });
         response.json({ auth: true, token, result });
       } else response.send(null);
