@@ -199,7 +199,7 @@ app.post("/login", (request, response) => {
           expires: new Date(Date.now() + 1200000),
           httpOnly: true,
           secure: true,
-          // sameSite: "none",
+          sameSite: "none",
         });
         response.json({ auth: true, token, result });
       } else response.send(null);
