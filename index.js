@@ -197,6 +197,7 @@ app.post("/login", (request, response) => {
         response.cookie("token", token, {
           path: "/",
           expires: new Date(Date.now() + 1200000),
+          domain:".onderender.com",
           httpOnly: false,
           secure: true,
           sameSite: "none",
