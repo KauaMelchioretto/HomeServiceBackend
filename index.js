@@ -197,7 +197,6 @@ app.post("/login", (request, response) => {
         response.cookie("token", token, {
           path: "/",
           expires: new Date(Date.now() + 1200000),
-          domain: 'https://homeservice-ute7.onrender.com/',
           httpOnly: false,
           secure: true,
           sameSite: "none",
