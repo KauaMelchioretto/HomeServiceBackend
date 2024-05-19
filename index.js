@@ -6,14 +6,20 @@ const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
 const dataBase = new postGree.Pool({
-  connectionString: process.env.CONNECTION_STRING
+  user: "postgres",
+  password: "password",
+  port: 5432,
+  database: "homeservice",
+  host: "localhost"
+  // connectionString: process.env.CONNECTION_STRING
 });
+
 
 app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
 });
 
-app.use(cors({ credentials:true, origin:"http://localhost:3000"/*"https://homeservice-ute7.onrender.com"*/ }));
+app.use(cors({ credentials:true, origin:/*"http://localhost:3000"*/"https://homeservice-ute7.onrender.com" }));
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');
