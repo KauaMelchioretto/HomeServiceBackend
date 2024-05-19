@@ -13,8 +13,12 @@ app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
 });
 
-app.use(cors({ credentials:true, origin:"https://homeservice-ute7.onrender.com" }));
+app.use(cors({ credentials:true, origin:"http://localhost:3000"/*"https://homeservice-ute7.onrender.com"*/ }));
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'application/json');
+  next();
+});
 
 dataBase.connect((err) => {
   if (err) console.log(err);
@@ -98,7 +102,7 @@ app.post("/resultados", (request, response) => {
       [information],
       (err, result) => {
         if (err) console.log(err);
-        else response.send(result.rows);
+        else response.json(result.rows);
       }
     );
   } else {
