@@ -5,15 +5,21 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
-const dataBase = new postGree.Pool({
-  user: "postgres",
-  password: "password",
-  port: 5432,
-  database: "homeservice",
-  host: "localhost"
-  // connectionString: process.env.CONNECTION_STRING
-});
+var dataBase;
 
+if(process.env.PORT == undefined || process.env.PORT == 3001) {
+  dataBase = new postGree.Pool({
+    user: process.env.LOCAL_USER,
+    password: process.env.LOCAL_PASSWORD,
+    port: process.env.LOCAL_PORT,
+    database: process.env.LOCAL_DB,
+    host: process.env.LOCAL_HOST
+  });
+} else {
+  dataBase = new postGree.Pool({
+    connectionString: process.env.CONNECTION_STRING
+  });
+}
 
 app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
