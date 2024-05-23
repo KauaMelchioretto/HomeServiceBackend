@@ -25,7 +25,7 @@ app.listen(process.env.PORT || 3001, () => {
   console.log(`rodando server na porta ${process.env.PORT}`);
 });
 
-app.use(cors({ credentials:true, origin: process.env.PORT == undefined || 3001 ? "http://localhost:3000" : "https://homeservice-ute7.onrender.com" }));
+app.use(cors({ credentials:true, origin: process.env.PORT == undefined ? "http://localhost:3000" : "https://homeservice-ute7.onrender.com" }));
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader('Content-Type', 'application/json');
